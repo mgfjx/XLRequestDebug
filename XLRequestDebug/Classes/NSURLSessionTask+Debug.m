@@ -73,6 +73,8 @@ body: %@\n\
     method_exchangeImplementations(system_method, my_method);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector" //忽略Undeclared Selector 警告
 + (NSURLSession *)xl_sessionWithConfiguration:(NSURLSessionConfiguration *)configuration delegate:(nullable id <NSURLSessionDelegate>)delegate delegateQueue:(nullable NSOperationQueue *)queue {
     //hook方法：URLSession:dataTask:didReceiveData:
     {
@@ -126,5 +128,6 @@ result: %@\n\
      */
     typed2_msgSend(self, @selector(xl_URLSession:task:didCompleteWithError:), session, task, error);
 }
+#pragma clang diagnostic pop
 
 @end
