@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+#ifdef DEBUG
 id (*typed_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) = (void *)objc_msgSend;
 id (*typed2_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSError *error) = (void *)objc_msgSend;
 
@@ -131,3 +132,5 @@ result: %@\n\
 #pragma clang diagnostic pop
 
 @end
+#else
+#endif

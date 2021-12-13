@@ -12,7 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSURLSessionTask (Debug)
 
+#ifdef DEBUG
 @property (nonatomic, strong) NSMutableData *xl_data ;
+#else
+#endif
 
 @end
 
