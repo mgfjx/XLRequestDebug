@@ -5,24 +5,14 @@
 [![License](https://img.shields.io/cocoapods/l/XLRequestDebug.svg?style=flat)](https://cocoapods.org/pods/XLRequestDebug)
 [![Platform](https://img.shields.io/cocoapods/p/XLRequestDebug.svg?style=flat)](https://cocoapods.org/pods/XLRequestDebug)
 
-## Example
+该工具用于调试网络请求，使用了runtime进行请求拦截，主要实现零入侵打印请求与返回数据，将`NSURLSessionTask+Debug.h`和`NSURLSessionTask+Debug.m`拖入项目中即可。不建议在生成环境使用。
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
 
 ## Installation
-
-XLRequestDebug is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'XLRequestDebug'
 ```
-
-## Author
-
-xxl, xiexiaolong.xxl@alibaba-inc.com
 
 ## License
 

@@ -1,0 +1,22 @@
+{
+  "name": "XLRequestDebug",
+  "version": "0.1.0",
+  "summary": "A short description of XLRequestDebug.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/xxl/XLRequestDebug",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "xxl": "xiexiaolong.xxl@alibaba-inc.com"
+  },
+  "source": {
+    "git": "https://github.com/xxl/XLRequestDebug.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "XLRequestDebug/Classes/**/*"
+}

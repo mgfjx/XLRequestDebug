@@ -1,0 +1,6 @@
+framework module Pods_XLRequestDebug_Tests {
+  umbrella header "Pods-XLRequestDebug_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
