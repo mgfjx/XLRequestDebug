@@ -11,13 +11,20 @@
 #import <objc/message.h>
 
 #ifdef DEBUG
+//过滤请求
+NSArray *filterRequests(void) {
+    return @[
+        @"mobile-service/sdk/dc/ai",
+    ];
+}
+
 id (*typed_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) = (void *)objc_msgSend;
 id (*typed2_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSError *error) = (void *)objc_msgSend;
 
 @implementation NSURLSessionTask (Debug)
 
 // 属性
-static char *kDataKey = "xl_data";
+static char *kDataKey = "kDataKey";
 - (void)setXl_data:(NSMutableData *)xl_data {
     objc_setAssociatedObject(self, kDataKey, xl_data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -35,31 +42,37 @@ static char *kDataKey = "xl_data";
     Method system_method = class_getInstanceMethod([self class], @selector(resume));
     Method my_method = class_getInstanceMethod([self class], @selector(xl_resume));
     method_exchangeImplementations(system_method, my_method);
-    
-    {
-        Method system_method = class_getInstanceMethod([self class], @selector(setDelegate:));
-        Method my_method = class_getInstanceMethod([self class], @selector(xl_setDelegate:));
-        method_exchangeImplementations(system_method, my_method);
-    }
-}
-
-- (void)xl_setDelegate:(id)obj {
-    [self xl_setDelegate:obj];
 }
 
 - (void)xl_resume {
     NSURLRequest *request = self.currentRequest;
-    NSString *body = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
-    NSArray *params = [body componentsSeparatedByString:@"&"];
-    NSString *message = [NSString stringWithFormat:
+    NSString *urlString = request.URL.absoluteString;
+    BOOL ignore = NO; //是否忽略 不打印
+    for (NSString *shortUrl in filterRequests()) {
+        if ([urlString containsString:shortUrl]) {
+            ignore = YES;
+            break;
+        }
+    }
+    if (!ignore) {
+        id params = nil;
+        if (request.HTTPBody) {
+            params = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:nil];
+            if (!params) {
+                NSString *body = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+                params = [body componentsSeparatedByString:@"&"];
+            }
+        }
+        NSString *message = [NSString stringWithFormat:
 @"\n########################### 请求参数begin #################################\n\
 url: %@\n\
 method: %@\n\
 header: %@\n\
 body: %@\n\
 ########################### 请求参数end   #################################\
-", request.URL.absoluteString, request.HTTPMethod, request.allHTTPHeaderFields, params];
-    NSLog(@"%@", message);
+    ", request.URL.absoluteString, request.HTTPMethod, request.allHTTPHeaderFields, params];
+        NSLog(@"%@", message);
+    }
     [self xl_resume];
 }
 
@@ -112,21 +125,44 @@ void xl_URLSessionReceiveData(id self, SEL _cmd, NSURLSession *session, NSURLSes
 
 //xl_URLSession:task:didCompleteWithError: 实现
 void xl_URLSessionDidComplete(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSError *error) {
-    //拦截请求回调方法：在此处打印返回数据即可
-    NSMutableData *data = [task.xl_data copy];
-    NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSString *message = [NSString stringWithFormat:
+    
+    NSURLRequest *request = task.currentRequest;
+    NSString *urlString = request.URL.absoluteString;
+    BOOL ignore = NO; //是否忽略 不打印
+    for (NSString *shortUrl in filterRequests()) {
+        if ([urlString containsString:shortUrl]) {
+            ignore = YES;
+            break;
+        }
+    }
+    if (!ignore) {
+        if (error) {
+            NSString *message = [NSString stringWithFormat:
+@"\n========================== 服务返回begin ==========================\n\
+url: %@\n\
+error: %@\n\
+========================== 服务返回end   ==========================\
+        ", task.currentRequest.URL.absoluteString, error];
+            NSLog(@"%@", message);
+        } else {
+            //拦截请求回调方法：在此处打印返回数据即可
+            NSMutableData *data = [task.xl_data copy];
+            NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\
 url: %@,\n\
+response: %@,\n\
 result: %@\n\
 ========================== 服务返回end   ==========================\
-", task.currentRequest.URL.absoluteString, result];
-    NSLog(@"%@", message); //可能出现文本太长打印不全的情况，实际是完整的数据，可以打开下面的注释进行校验
-    /*
-    NSString *filePath = [NSString stringWithFormat:@"%@/note.txt", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
-    [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
-    [message writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
-     */
+        ", task.currentRequest.URL.absoluteString, task.response, result];
+            NSLog(@"%@", message); //可能出现文本太长打印不全的情况，实际是完整的数据，可以打开下面的注释进行校验
+            /*
+            NSString *filePath = [NSString stringWithFormat:@"%@/note.txt", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
+            [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+            [message writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+             */
+        }
+    }
     typed2_msgSend(self, @selector(xl_URLSession:task:didCompleteWithError:), session, task, error);
 }
 #pragma clang diagnostic pop

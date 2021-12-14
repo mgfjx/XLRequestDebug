@@ -35,7 +35,12 @@
 
 - (void)getRequest {
     NSLog(@"getRequest");
-    [[AFHTTPSessionManager manager] GET:@"https://api.oick.cn/lishi/api.php" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] GET:@"https://dict-mobile.iciba.com/interface/index.php" parameters:@{
+        @"c": @"word",
+        @"m": @"getsuggest",
+        @"is_need_mean": @(1),
+        @"word": @"construction",
+    } headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 //        NSLog(@"%@", error);

@@ -515,6 +515,7 @@
 			baseConfigurationReference = 525603DC684A790473496011 /* Pods-XLRequestDebug_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLRequestDebug/XLRequestDebug-Prefix.pch";
 				INFOPLIST_FILE = "XLRequestDebug/XLRequestDebug-Info.plist";
@@ -531,6 +532,7 @@
 			baseConfigurationReference = B41F9BA56EBC4EABF3421142 /* Pods-XLRequestDebug_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XLRequestDebug/XLRequestDebug-Prefix.pch";
 				INFOPLIST_FILE = "XLRequestDebug/XLRequestDebug-Info.plist";
