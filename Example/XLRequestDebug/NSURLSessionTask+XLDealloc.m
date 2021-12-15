@@ -7,6 +7,7 @@
 //
 
 #import "NSURLSessionTask+XLDealloc.h"
+#import "NSURLSessionTask+Debug.h"
 
 @implementation NSURLSessionTask (XLDealloc)
 

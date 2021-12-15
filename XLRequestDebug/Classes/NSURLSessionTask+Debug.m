@@ -11,11 +11,31 @@
 #import <objc/message.h>
 
 #ifdef DEBUG
-//过滤请求
-NSArray *filterRequests(void) {
+//要过滤的url
+NSArray *filterURLs(void) {
     return @[
         @"mobile-service/sdk/dc/ai",
     ];
+}
+
+BOOL isImageRequest(NSURL *url) {
+    NSArray *arr = @[@"png", @"jpg", @"jpeg", @"icns", @"webp"];
+    return [arr containsObject:url.pathExtension.lowercaseString];
+}
+
+//是否过滤请求
+BOOL isFilterRequests(NSURL *url) {
+    
+    NSString *urlString = url.absoluteString;
+    BOOL ignore = NO; //是否忽略 不打印
+    for (NSString *shortUrl in filterURLs()) {
+        if ([urlString containsString:shortUrl]) {
+            ignore = YES;
+            break;
+        }
+    }
+    
+    return ignore || isImageRequest(url);
 }
 
 id (*typed_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) = (void *)objc_msgSend;
@@ -46,15 +66,7 @@ static char *kDataKey = "kDataKey";
 
 - (void)xl_resume {
     NSURLRequest *request = self.currentRequest;
-    NSString *urlString = request.URL.absoluteString;
-    BOOL ignore = NO; //是否忽略 不打印
-    for (NSString *shortUrl in filterRequests()) {
-        if ([urlString containsString:shortUrl]) {
-            ignore = YES;
-            break;
-        }
-    }
-    if (!ignore) {
+    if (!isFilterRequests(request.URL)) {
         id params = nil;
         if (request.HTTPBody) {
             params = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:nil];
@@ -125,17 +137,7 @@ void xl_URLSessionReceiveData(id self, SEL _cmd, NSURLSession *session, NSURLSes
 
 //xl_URLSession:task:didCompleteWithError: 实现
 void xl_URLSessionDidComplete(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSError *error) {
-    
-    NSURLRequest *request = task.currentRequest;
-    NSString *urlString = request.URL.absoluteString;
-    BOOL ignore = NO; //是否忽略 不打印
-    for (NSString *shortUrl in filterRequests()) {
-        if ([urlString containsString:shortUrl]) {
-            ignore = YES;
-            break;
-        }
-    }
-    if (!ignore) {
+    if (!isFilterRequests(task.currentRequest.URL)) {
         if (error) {
             NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\

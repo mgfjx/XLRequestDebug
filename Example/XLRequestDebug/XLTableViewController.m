@@ -35,11 +35,11 @@
 
 - (void)getRequest {
     NSLog(@"getRequest");
-    [[AFHTTPSessionManager manager] GET:@"https://dict-mobile.iciba.com/interface/index.php" parameters:@{
-        @"c": @"word",
-        @"m": @"getsuggest",
-        @"is_need_mean": @(1),
-        @"word": @"construction",
+    [[AFHTTPSessionManager manager] POST:@"https://v1.alapi.cn/api/music/search" parameters:@{
+        @"keyword": @"说爱你",
+        @"limit": @(10),
+        @"offset": @(1),
+        @"type": @(1),
     } headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
