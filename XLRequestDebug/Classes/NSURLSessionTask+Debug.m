@@ -157,13 +157,18 @@ error: %@\n\
                 CFStringTransform((__bridge CFMutableStringRef)convertedString, NULL, transform, YES);
             }
             result = convertedString;
+            NSInteger statusCode = -1;
+            if (task.response && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+                statusCode = ((NSHTTPURLResponse *)task.response).statusCode;
+            }
             NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\
 url: %@,\n\
-response: %@,\n\
-result: %@\n\
+statusCode: %ld,\n\
+result:\n\
+%@\n\
 ========================== 服务返回end   ==========================\
-        ", task.currentRequest.URL.absoluteString, task.response, result];
+        ", task.currentRequest.URL.absoluteString, statusCode, result];
             NSLog(@"%@", message); //可能出现文本太长打印不全的情况，实际是完整的数据，可以打开下面的注释进行校验
             /*
             NSString *filePath = [NSString stringWithFormat:@"%@/note.txt", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
