@@ -150,6 +150,13 @@ error: %@\n\
             //拦截请求回调方法：在此处打印返回数据即可
             NSMutableData *data = [task.xl_data copy];
             NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSMutableString *convertedString = [result mutableCopy];
+            if (convertedString.length > 0) {
+                [convertedString replaceOccurrencesOfString:@"\\U" withString:@"\\u" options:0 range:NSMakeRange(0, convertedString.length)];
+                CFStringRef transform = CFSTR("Any-Hex/Java");
+                CFStringTransform((__bridge CFMutableStringRef)convertedString, NULL, transform, YES);
+            }
+            result = convertedString;
             NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\
 url: %@,\n\
