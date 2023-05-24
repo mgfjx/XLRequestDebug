@@ -9,17 +9,26 @@
 #import "XLTableViewController.h"
 #import <AFNetworking/AFNetworking.h>
 #import "NSString+MD5.h"
+#import <XLRequestDebug/XLRequestManager.h>
 
 @interface XLTableViewController ()
 
 @property (nonatomic, strong) NSArray *dataArray ;
+@property (weak, nonatomic) IBOutlet UISwitch *onSwitch;
 
 @end
 
 @implementation XLTableViewController
 
+
+- (IBAction)blockRequest:(UISwitch *)sender {
+    [XLRequestManager shared].enable = sender.on;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.onSwitch.on = [XLRequestManager shared].enable;
     
     self.title = @"Request List";
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];;

@@ -7,16 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "XLRequestManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSURLSessionTask (Debug)
 
-#ifdef DEBUG
 @property (nonatomic, strong) NSMutableData *xl_data ;
 @property (nonatomic, strong) NSString *xl_requestId ;
-#else
-#endif
 
 @end
 

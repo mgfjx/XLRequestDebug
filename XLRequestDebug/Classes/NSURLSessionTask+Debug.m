@@ -9,8 +9,6 @@
 #import "NSURLSessionTask+Debug.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-
-#ifdef DEBUG
 //要过滤的url
 NSArray *filterURLs(void) {
     return @[
@@ -69,9 +67,11 @@ static char *kRequestIdKey = "kRequestIdKey";
 }
 
 + (void)load {
-    Method system_method = class_getInstanceMethod([self class], @selector(resume));
-    Method my_method = class_getInstanceMethod([self class], @selector(xl_resume));
-    method_exchangeImplementations(system_method, my_method);
+    if ([XLRequestManager shared].enable) {
+        Method system_method = class_getInstanceMethod([self class], @selector(resume));
+        Method my_method = class_getInstanceMethod([self class], @selector(xl_resume));
+        method_exchangeImplementations(system_method, my_method);
+    }
 }
 
 - (void)xl_resume {
@@ -107,9 +107,11 @@ body: %@\n\
 @implementation NSURLSession (Debug)
 
 + (void)load {
-    Method system_method = class_getClassMethod([self class], @selector(sessionWithConfiguration:delegate:delegateQueue:));
-    Method my_method = class_getClassMethod([self class], @selector(xl_sessionWithConfiguration:delegate:delegateQueue:));
-    method_exchangeImplementations(system_method, my_method);
+    if ([XLRequestManager shared].enable) {
+        Method system_method = class_getClassMethod([self class], @selector(sessionWithConfiguration:delegate:delegateQueue:));
+        Method my_method = class_getClassMethod([self class], @selector(xl_sessionWithConfiguration:delegate:delegateQueue:));
+        method_exchangeImplementations(system_method, my_method);
+    }
 }
 
 #pragma clang diagnostic push
@@ -197,5 +199,3 @@ result:\n\
 #pragma clang diagnostic pop
 
 @end
-#else
-#endif
