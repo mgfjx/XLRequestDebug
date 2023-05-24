@@ -8,6 +8,7 @@
 
 #import "XLTableViewController.h"
 #import <AFNetworking/AFNetworking.h>
+#import "NSString+MD5.h"
 
 @interface XLTableViewController ()
 
@@ -31,15 +32,35 @@
 
 - (void)postRequest {
     NSLog(@"postRequest");
+    NSString *appid = @"20220505001203855";
+    NSString *query = @"你是傻逼";
+    NSString *salt = @"1231231";
+    NSString *signBefore = [NSString stringWithFormat:@"%@%@%@kgLnrss5MVpucE8LOON1", appid, query, salt];
+    NSString *sign = [[NSString getmd5Str:signBefore] lowercaseString];
+    NSDictionary *param = @{
+        @"q": query,
+        @"from": @"zh",
+        @"to": @"en",
+        @"appid": appid,
+        @"salt": salt,
+        @"sign": sign
+    };
+    NSLog(@"-------");
+    [[AFHTTPSessionManager manager] POST:@"https://fanyi-api.baidu.com/api/trans/vip/translate" parameters:param headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"%@", error);
+    }];
 }
 
 - (void)getRequest {
     NSLog(@"getRequest");
-    [[AFHTTPSessionManager manager] POST:@"https://v1.alapi.cn/api/music/search" parameters:@{
-        @"keyword": @"说爱你",
-        @"limit": @(10),
-        @"offset": @(1),
-        @"type": @(1),
+    [[AFHTTPSessionManager manager] GET:@"https://v0.yiketianqi.com/api" parameters:@{
+        @"unescape": @(1),
+        @"version": @"v61",
+        @"appid": @"29578935",
+        @"appsecret": @"0NBY2H0r",
+        @"cityid": @"101200113",
     } headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
