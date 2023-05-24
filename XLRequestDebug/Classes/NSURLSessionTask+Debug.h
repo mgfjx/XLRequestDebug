@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #ifdef DEBUG
 @property (nonatomic, strong) NSMutableData *xl_data ;
+@property (nonatomic, strong) NSString *xl_requestId ;
 #else
 #endif
 

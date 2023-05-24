@@ -45,6 +45,7 @@ id (*typed2_msgSend)(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask 
 
 // 属性
 static char *kDataKey = "kDataKey";
+static char *kRequestIdKey = "kRequestIdKey";
 - (void)setXl_data:(NSMutableData *)xl_data {
     objc_setAssociatedObject(self, kDataKey, xl_data, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -56,6 +57,15 @@ static char *kDataKey = "kDataKey";
         self.xl_data = data;
     }
     return data;
+}
+
+- (void)setXl_requestId:(NSString *)xl_requestId {
+    objc_setAssociatedObject(self, kRequestIdKey, xl_requestId, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSString *)xl_requestId {
+    NSString *requestId = objc_getAssociatedObject(self, kRequestIdKey);
+    return requestId;
 }
 
 + (void)load {
@@ -75,14 +85,17 @@ static char *kDataKey = "kDataKey";
                 params = [body componentsSeparatedByString:@"&"];
             }
         }
+        NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
+        self.xl_requestId = [NSString stringWithFormat:@"%ld", ((long)time*1000 + arc4random()%1000)];
         NSString *message = [NSString stringWithFormat:
 @"\n########################### 请求参数begin #################################\n\
 url: %@\n\
 method: %@\n\
+requestId: %@\n\
 header: %@\n\
 body: %@\n\
 ########################### 请求参数end   #################################\
-    ", request.URL.absoluteString, request.HTTPMethod, request.allHTTPHeaderFields, params];
+    ", request.URL.absoluteString, request.HTTPMethod, self.xl_requestId, request.allHTTPHeaderFields, params];
         NSLog(@"%@", message);
     }
     [self xl_resume];
@@ -161,14 +174,16 @@ error: %@\n\
             if (task.response && [task.response isKindOfClass:[NSHTTPURLResponse class]]) {
                 statusCode = ((NSHTTPURLResponse *)task.response).statusCode;
             }
+            NSString *requestId = task.xl_requestId;
             NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\
 url: %@,\n\
 statusCode: %ld,\n\
+requestId: %@,\n\
 result:\n\
 %@\n\
 ========================== 服务返回end   ==========================\
-        ", task.currentRequest.URL.absoluteString, statusCode, result];
+        ", task.currentRequest.URL.absoluteString, statusCode, requestId, result];
             NSLog(@"%@", message); //可能出现文本太长打印不全的情况，实际是完整的数据，可以打开下面的注释进行校验
             /*
             NSString *filePath = [NSString stringWithFormat:@"%@/note.txt", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
