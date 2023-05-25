@@ -71,7 +71,7 @@
 		B41F9BA56EBC4EABF3421142 /* Pods-XLRequestDebug_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLRequestDebug_Example.release.xcconfig"; path = "Target Support Files/Pods-XLRequestDebug_Example/Pods-XLRequestDebug_Example.release.xcconfig"; sourceTree = "<group>"; };
 		DB625E596FC4EC8500982629 /* Pods_XLRequestDebug_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XLRequestDebug_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4706ACFF43FB684F1815824 /* Pods_XLRequestDebug_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XLRequestDebug_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EDE3CC9D9B034F661121F1A2 /* XLRequestDebug.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = XLRequestDebug.podspec; path = ../XLRequestDebug.podspec; sourceTree = "<group>"; };
+		EDE3CC9D9B034F661121F1A2 /* XLRequestDebug.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = XLRequestDebug.podspec; path = ../XLRequestDebug.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F139AD430F55B67F427B31E4 /* Pods-XLRequestDebug_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XLRequestDebug_Tests.debug.xcconfig"; path = "Target Support Files/Pods-XLRequestDebug_Tests/Pods-XLRequestDebug_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -336,11 +336,13 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-XLRequestDebug_Example/Pods-XLRequestDebug_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/XLRequestDebug/XLRequestDebug.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLRequestDebug.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

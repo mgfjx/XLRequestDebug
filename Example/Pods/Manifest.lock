@@ -19,7 +19,11 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - XLRequestDebug (0.1.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - XLRequestDebug (0.1.0):
+    - FMDB
 
 DEPENDENCIES:
   - AFNetworking (~> 4.0)
@@ -30,6 +34,7 @@ SPEC REPOS:
   trunk:
     - AFNetworking
     - FBSnapshotTestCase
+    - FMDB
 
 EXTERNAL SOURCES:
   XLRequestDebug:
@@ -38,7 +43,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  XLRequestDebug: 83376b2bf5abb895bdde7dabf0eaf9d340c6f1b4
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  XLRequestDebug: 316fad0419cd700356c60d2a53ff1dcb266dfd6f
 
 PODFILE CHECKSUM: d3d0c1053e349787801c2baac19ed743918b5504
 

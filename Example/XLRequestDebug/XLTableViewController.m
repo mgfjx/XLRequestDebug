@@ -39,26 +39,12 @@
     ];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
-    
-//    [self createTableView];
-}
-
-- (void)createTableView {
-    
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height) style:UITableViewStylePlain];
-    table.delegate = self;
-    table.dataSource = self;
-    [self.view addSubview:table];
-    self.tableView = table;
-    
-    
-    
 }
 
 - (void)postRequest {
     NSLog(@"postRequest");
     NSString *appid = @"20220505001203855";
-    NSString *query = @"你是傻逼";
+    NSString *query = @"你是我的天使";
     NSString *salt = @"1231231";
     NSString *signBefore = [NSString stringWithFormat:@"%@%@%@kgLnrss5MVpucE8LOON1", appid, query, salt];
     NSString *sign = [[NSString getmd5Str:signBefore] lowercaseString];

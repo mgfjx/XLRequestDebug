@@ -18,5 +18,10 @@
   "platforms": {
     "ios": "9.0"
   },
-  "source_files": "XLRequestDebug/Classes/**/*"
+  "source_files": "XLRequestDebug/Classes/**/*",
+  "dependencies": {
+    "FMDB": [
+
+    ]
+  }
 }
