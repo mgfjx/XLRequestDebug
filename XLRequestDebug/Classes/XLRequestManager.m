@@ -44,7 +44,10 @@ static id singleton = nil;
 }
 
 - (void)setEnable:(BOOL)enable {
-    [[NSUserDefaults standardUserDefaults] setBool:enable forKey:kXLRequestManagerEnable];
+    NSLog(@"%@", NSThread.currentThread);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:enable forKey:kXLRequestManagerEnable];
+    [defaults synchronize];
 }
 
 - (BOOL)enable {

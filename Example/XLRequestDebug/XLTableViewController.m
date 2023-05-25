@@ -11,10 +11,11 @@
 #import "NSString+MD5.h"
 #import <XLRequestDebug/XLRequestManager.h>
 
-@interface XLTableViewController ()
+@interface XLTableViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSArray *dataArray ;
 @property (weak, nonatomic) IBOutlet UISwitch *onSwitch;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -31,12 +32,27 @@
     self.onSwitch.on = [XLRequestManager shared].enable;
     
     self.title = @"Request List";
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];;
     
     self.dataArray = @[
         @{@"title": @"POST", @"selector": NSStringFromSelector(@selector(postRequest))},
         @{@"title": @"GET", @"selector": NSStringFromSelector(@selector(getRequest))},
     ];
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
+    
+//    [self createTableView];
+}
+
+- (void)createTableView {
+    
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height) style:UITableViewStylePlain];
+    table.delegate = self;
+    table.dataSource = self;
+    [self.view addSubview:table];
+    self.tableView = table;
+    
+    
+    
 }
 
 - (void)postRequest {
