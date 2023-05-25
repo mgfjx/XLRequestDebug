@@ -11,6 +11,7 @@
 #endif
 
 #import "NSURLSessionTask+Debug.h"
+#import "XLRequestListController.h"
 #import "XLRequestManager.h"
 
 FOUNDATION_EXPORT double XLRequestDebugVersionNumber;

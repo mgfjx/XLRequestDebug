@@ -10,6 +10,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "NSString+MD5.h"
 #import <XLRequestDebug/XLRequestManager.h>
+#import <XLRequestDebug/XLRequestListController.h>
 
 @interface XLTableViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -39,6 +40,13 @@
     ];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
+}
+
+- (IBAction)gotoListVC:(UIBarButtonItem *)sender {
+    
+    XLRequestListController *vc = [[XLRequestListController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 - (void)postRequest {

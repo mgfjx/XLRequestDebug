@@ -57,7 +57,13 @@
                             <constraint firstItem="m7a-D9-zmY" firstAttribute="leading" secondItem="cE9-07-aow" secondAttribute="leading" id="zL9-Am-0Ha"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="daG-uI-Y5P"/>
+                    <navigationItem key="navigationItem" id="daG-uI-Y5P">
+                        <barButtonItem key="rightBarButtonItem" title="list" id="Rf0-9C-lfY">
+                            <connections>
+                                <action selector="gotoListVC:" destination="JiC-eE-eQZ" id="VR6-6L-Zwt"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="onSwitch" destination="7hc-mN-ncM" id="jet-5R-1Yf"/>
                         <outlet property="tableView" destination="m7a-D9-zmY" id="egf-7F-b7B"/>
