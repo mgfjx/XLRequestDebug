@@ -9,6 +9,7 @@
 #import "NSURLSessionTask+Debug.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "XLDBManager.h"
 //要过滤的url
 NSArray *filterURLs(void) {
     return @[
@@ -75,8 +76,12 @@ static char *kRequestIdKey = "kRequestIdKey";
 }
 
 - (void)xl_resume {
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
+    self.xl_requestId = [NSString stringWithFormat:@"%ld", ((long)time*1000 + arc4random()%1000)];
+    NSString *requestId = self.xl_requestId;
     NSURLRequest *request = self.currentRequest;
     if (!isFilterRequests(request.URL)) {
+        [[XLDBManager manager] saveRequest:self];
         id params = nil;
         if (request.HTTPBody) {
             params = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:nil];
@@ -85,8 +90,6 @@ static char *kRequestIdKey = "kRequestIdKey";
                 params = [body componentsSeparatedByString:@"&"];
             }
         }
-        NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
-        self.xl_requestId = [NSString stringWithFormat:@"%ld", ((long)time*1000 + arc4random()%1000)];
         NSString *message = [NSString stringWithFormat:
 @"\n########################### 请求参数begin #################################\n\
 url: %@\n\
@@ -153,6 +156,7 @@ void xl_URLSessionReceiveData(id self, SEL _cmd, NSURLSession *session, NSURLSes
 //xl_URLSession:task:didCompleteWithError: 实现
 void xl_URLSessionDidComplete(id self, SEL _cmd, NSURLSession *session, NSURLSessionTask *task, NSError *error) {
     if (!isFilterRequests(task.currentRequest.URL)) {
+        [[XLDBManager manager] saveResponse:task error:error];
         if (error) {
             NSString *message = [NSString stringWithFormat:
 @"\n========================== 服务返回begin ==========================\n\
